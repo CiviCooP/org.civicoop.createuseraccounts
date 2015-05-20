@@ -3,6 +3,27 @@
 require_once 'createuseraccounts.civix.php';
 
 /**
+ * Implementation of hook_civicrm_searchTasks
+ *
+ * Add a task for creating user accounts to the search task list
+ *
+ * @param $objectName
+ * @param $tasks
+ */
+function createuseraccounts_civicrm_searchTasks( $objectName, &$tasks ) {
+  if ($objectName == 'contact') {
+    $permission = CRM_Core_Permission::check('administer CiviCRM');
+    if (!$permission) {
+      return;
+    }
+    $tasks['org_civicoop_createuseraccount'] = array(
+      'title' => ts('Create user accounts'),
+      'class' => 'CRM_Createuseraccounts_Form_Task',
+    );
+  }
+}
+
+/**
  * Implementation of hook_civicrm_config
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
